@@ -1,26 +1,52 @@
 import { t } from 'testcafe';
 
+class Dev {
+
+  constructor(private resolution: string) {
+  }
+
+  expectElement(baseElement: Selector) {
+    return new Elmt(baseElement, this.resolution);
+  }
+}
+
 class Elmt {
-    constructor(private base: Selector) {}
 
-    async leftOf(target: Selector) {
-        return t.expect(this.base.getBoundingClientRectProperty('right')).lt((await target.getBoundingClientRectProperty('left')));
-    }
+  width: number;
+  height: number;
 
-    async rightOf(target: Selector) {
-        return t.expect(this.base.getBoundingClientRectProperty('left')).gt((await target.getBoundingClientRectProperty('right')));
-    }
+  constructor(private base: Selector, private resolution: string) {
+    const res = resolution.split('x');
+    this.width = +res[0];
+    this.height = +res[1];
+  }
 
-    async below(target: Selector) {
-        return t.expect(this.base.getBoundingClientRectProperty('top')).gt((await target.getBoundingClientRectProperty('bottom')));
-    }
+  async leftOf(target: Selector) {
+    return t
+      .resizeWindow(this.width, this.height)
+      .expect(this.base.getBoundingClientRectProperty('right')).lt((await target.getBoundingClientRectProperty('left')));
+  }
 
-    async above(target: Selector) {
-        return t.expect(this.base.getBoundingClientRectProperty('bottom')).lt((await target.getBoundingClientRectProperty('top')));
-    }
+  async rightOf(target: Selector) {
+    return t
+      .resizeWindow(this.width, this.height)
+      .expect(this.base.getBoundingClientRectProperty('left')).gt((await target.getBoundingClientRectProperty('right')));
+  }
+
+  async below(target: Selector) {
+    return t
+      .resizeWindow(this.width, this.height)
+      .expect(this.base.getBoundingClientRectProperty('top')).gt((await target.getBoundingClientRectProperty('bottom')));
+  }
+
+  async above(target: Selector) {
+    return t
+      .resizeWindow(this.width, this.height)
+      .expect(this.base.getBoundingClientRectProperty('bottom')).lt((await target.getBoundingClientRectProperty('top')));
+  }
 
 }
 
-export function expectElement(baseElement: Selector) {
-    return new Elmt(baseElement);
+export function device(resolution: string) {
+  return new Dev(resolution);
 }

@@ -21,7 +21,8 @@
     "skipLibCheck": true
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "lib"
   ],
   "compileOnSave": false,
   "buildOnSave": false

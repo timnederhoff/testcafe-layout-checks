@@ -4,7 +4,8 @@
   "description": "layout checks additional to the testcafe functionality",
   "main": "lib/index",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "pretest": "npm run build",
+    "test": "testcafe chrome test/test.ts",
     "build": "tsc"
   },
   "typings": "typings",
