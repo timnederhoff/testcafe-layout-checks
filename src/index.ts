@@ -1,52 +1,38 @@
 import { t } from 'testcafe';
 
-class Dev {
-
-  constructor(private resolution: string) {
+export async function device(resolution: string, ...expects: Promise<any>[]) {
+  const res = resolution.split('x');
+  await t.resizeWindow(+res[0], +res[0]);
+  for (const prom of expects) {
+    await prom;
   }
-
-  expectElement(baseElement: Selector) {
-    return new Elmt(baseElement, this.resolution);
-  }
+  // TODO: return only the last promise
 }
 
-class Elmt {
+export function expectElement(baseElement: Selector) {
+  return new Assert(baseElement)
+}
 
-  width: number;
-  height: number;
-
-  constructor(private base: Selector, private resolution: string) {
-    const res = resolution.split('x');
-    this.width = +res[0];
-    this.height = +res[1];
-  }
+class Assert {
+  constructor(private base: Selector) {}
 
   async leftOf(target: Selector) {
-    return t
-      .resizeWindow(this.width, this.height)
-      .expect(this.base.getBoundingClientRectProperty('right')).lt((await target.getBoundingClientRectProperty('left')));
+    const left = await target.getBoundingClientRectProperty('left');
+    return await t.expect(this.base.getBoundingClientRectProperty('right')).lt(left);
   }
 
   async rightOf(target: Selector) {
-    return t
-      .resizeWindow(this.width, this.height)
-      .expect(this.base.getBoundingClientRectProperty('left')).gt((await target.getBoundingClientRectProperty('right')));
+    const right = await target.getBoundingClientRectProperty('right');
+    return await t.expect(this.base.getBoundingClientRectProperty('left')).gt(right);
   }
 
   async below(target: Selector) {
-    return t
-      .resizeWindow(this.width, this.height)
-      .expect(this.base.getBoundingClientRectProperty('top')).gt((await target.getBoundingClientRectProperty('bottom')));
+    const bottom = await target.getBoundingClientRectProperty('bottom');
+    return await t.expect(this.base.getBoundingClientRectProperty('top')).gt(bottom);
   }
 
   async above(target: Selector) {
-    return t
-      .resizeWindow(this.width, this.height)
-      .expect(this.base.getBoundingClientRectProperty('bottom')).lt((await target.getBoundingClientRectProperty('top')));
+    const top = await target.getBoundingClientRectProperty('top');
+    return await t.expect(this.base.getBoundingClientRectProperty('bottom')).lt(top);
   }
-
-}
-
-export function device(resolution: string) {
-  return new Dev(resolution);
 }

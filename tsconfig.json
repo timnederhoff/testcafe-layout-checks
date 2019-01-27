@@ -22,7 +22,8 @@
   },
   "exclude": [
     "node_modules",
-    "lib"
+    "lib",
+    "test"
   ],
   "compileOnSave": false,
   "buildOnSave": false
