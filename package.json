@@ -4,8 +4,8 @@
   "description": "layout checks additional to the testcafe functionality",
   "main": "lib/index",
   "scripts": {
-    "pretest": "npm run build",
-    "test": "testcafe chrome test/test.ts",
+    "pretest": "rm -rf lib && npm run build",
+    "test": "testcafe chrome -S -s target test/test.ts",
     "build": "tsc"
   },
   "typings": "typings",
