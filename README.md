@@ -1,1 +1,0 @@
-# testcafe-layout-checks
