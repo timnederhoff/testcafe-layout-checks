@@ -25,11 +25,11 @@
   "homepage": "https://github.com/timnederhoff/testcafe-layout-checks#readme",
   "dependencies": {},
   "devDependencies": {
-    "testcafe": "^1.0.0-alpha.2",
+    "testcafe": "^1.20.1",
     "ts-node": "^8.0.1",
     "typescript": "^3.2.4"
   },
   "peerDependencies": {
-    "testcafe": "^1.0.0-alpha.2"
+    "testcafe": "^1.20.1"
   }
 }
